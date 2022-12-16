@@ -1,0 +1,13 @@
+# Install
+# cargo install diesel_cli --no-default-features --features postgres
+# run
+# diesel print-schema --database-url=postgres://postgres:postgres@localhost:5433/pop_eth --schema data_work
+# cargo install diesel_cli_ext
+# diesel_ext -s src/db_models.rs
+[print_schema]
+
+filter.only_tables = [
+    "data_work.neighborhood_areas",
+    "data_work.neighborhood_types",
+    "data_work.population_zones"
+]

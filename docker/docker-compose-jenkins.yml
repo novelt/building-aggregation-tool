@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+
+  bldg-agg-python:
+    image: "${BLDG_AGG_PYTHON_IMAGE}:latest"
+    init: true
+    # needed for tarpaulin
+    security_opt :
+    - seccomp:unconfined
+    volumes:
+
+        - "/tmp/pop-model/rust_target_dir:/rust/target"
+        - "/tmp/pop-model/rust_target_dir2:/rust/target2"
+        - "/tmp/pop-model/cargo_home:/cargo_home"
+    environment:
+      - CARGO_HOME=/cargo_home

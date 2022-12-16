@@ -1,0 +1,30 @@
+/*
+This file is part of the Building Aggregration Tool
+Copyright (C) 2022 Novel-T
+
+The Building Aggregration Tool is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+use structopt::StructOpt;
+use std::path::PathBuf;
+
+#[derive(StructOpt)]
+pub struct LhsRhsArgs {
+    /// Base raster
+    #[structopt(parse(from_os_str), index=1, help="Base raster path")]
+    pub(crate) raster_lhs: PathBuf,
+
+    /// Compare raster
+    #[structopt(parse(from_os_str), index=2, help="Compare raster path")]
+    pub(crate) raster_rhs: PathBuf,
+}

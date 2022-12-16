@@ -1,0 +1,24 @@
+[package]
+name = "zonal_stats"
+version = "0.1.0"
+authors = ["root"]
+edition = "2018"
+license = "GPL-3.0-or-later"
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+
+[dependencies]
+geo_util = { path = "../geo_util" }
+anyhow = "1.0"
+num = "0"
+float-cmp = "0"
+structopt = { version = "0.3" }
+itertools = "*"
+
+[dependencies.gdal]
+version = "*"
+path = "../gdal"
+#path = "D:\\git\\gdal"
+#git = "https://github.com/eric7237cire/gdal"
+#branch = "experiment1"
+features = ["array"]

@@ -1,0 +1,5 @@
+doc.md
+**.pyc
+.ipynb_checkpoints
+__pycache__
+test/temp/*

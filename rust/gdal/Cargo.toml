@@ -1,0 +1,33 @@
+[package]
+name = "gdal"
+description = "GDAL bindings for Rust"
+license = "MIT"
+version = "0.6.0"
+authors = [
+    "Alex Morega <alex@grep.ro>",
+    "Johannes Drönner <droenner@informatik.uni-marburg.de>"
+    ]
+repository = "https://github.com/georust/gdal"
+documentation = "https://georust.github.io/gdal/"
+edition = "2018"
+
+[features]
+bindgen = ["gdal-sys/bindgen"]
+array = ["ndarray"]
+#datetime = ["chrono"]
+
+[dependencies]
+anyhow = "1"
+thiserror = "1"
+
+libc = "0.2"
+geo-types = "0.6.1"
+gdal-sys = { path = "../gdal-sys", features = ["min_gdal_version_3_2"]}
+num-traits = "0.2"
+num-integer = "0.1.44"
+ndarray = {version = "0.13.1", optional = true, features = [] }
+serde = {version="1.0", features = ["derive"]}
+chrono = {version="0.4", features = ["serde"]}
+hex = "0"
+log="0.4.14"
+

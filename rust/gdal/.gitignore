@@ -1,0 +1,9 @@
+/Cargo.lock
+/target
+/.vscode
+/rust/gdal-sys/target
+
+# gtags
+GPATH
+GTAGS
+GRTAGS

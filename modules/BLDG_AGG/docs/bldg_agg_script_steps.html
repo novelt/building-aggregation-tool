@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Building Aggregration Steps</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<ol>
+<li><p><strong>PrintInputInfo</strong></p>
+<p>Parses the inputs needed for the tool and prints info related to it to the log</p></li>
+<li><p><strong>AdjustRefRasterSize</strong></p>
+<p>Make sure the reference raster is big enough to cover all buildings</p></li>
+<li><p><strong>FixReprojectSplitBuildings</strong></p>
+<p>This step will</p>
+<ol>
+<li>Fix any invalid geometry in the raw building input</li>
+<li>Reproject the geometry to the reference raster CRS</li>
+<li>Split the input into 100 chunks, splitting the reference raster extent into 10x10 equal sized squares</li>
+</ol>
+<p>The chunks are written to the file system in the FlatGeoBuf format under the split directory</p></li>
+<li><p><strong>GroupBuildings</strong></p>
+<p>Groups near buildings to multipolygons. This will use the group distance.</p>
+<p>Note this distance is in degrees. Example, this is roughly 130 meters</p>
+<p><code>/run_bldg_agg.sh BLDG_AGG --country TGO --clean --group-distance=0.0012 4</code></p>
+<p>Each MultiPolygon in the output will contain all building polygons within this distance to each other.</p></li>
+<li><p><strong>FillCenterBuildingGroups</strong></p>
+<p>For each multipolygon of buildings, will replace buildings that are not near the center with a rasterized polygon of the interior.</p></li>
+<li><p><strong>BufferBuildings</strong></p>
+<p>Buffers the buildings, only the ones that are outside the contour</p>
+<p>The input is the filled multipolygon buildings (1 shape for the buildings and the filled interior)</p>
+<p>NOTE! If this step fails due to memory, try increasing --chunk-rows and --chunk-cols and rerunning from the split step</p></li>
+<li><p><strong>UnionAllBuffers</strong></p>
+<p>Union/Dissolves all the buffered building geometry. This ensures any intersecting geometries will become part of the same settlement geometry</p></li>
+<li><p><strong>CreateCentroids</strong></p>
+<p>Create centroids</p></li>
+<li><p><strong>CreateNewDatabase</strong></p>
+<p>Creates an empty PostGIS database in the db docker container</p></li>
+<li><p><strong>CreateBuildingCountRaster</strong></p>
+<p>Converts building counts into a raster. This is used to speed up the calculation of building count to settlement</p></li>
+<li><p><strong>ContourLines</strong></p>
+<p>Creates contour polygons from the building count raster.</p>
+<p>These polygons will surround raster squares that have at least the number of buildings specified by <code>--contour-value</code></p></li>
+<li><p><strong>ContourPolyStats</strong></p>
+<p>Calculates m2 area of contour lines</p></li>
+<li><p><strong>GridSliceSettlements</strong></p>
+<p>Slices the buffered/unioned buildings by the reference raster grid. This is to improve intersection performance because the extents will be smaller and the vertex accounts much lower.</p>
+<p>This will produce the raw output in working/<Country code>/grid_sliced_settlements/all.fgb</p></li>
+<li><p><strong>SplitGridSliceSettlements</strong></p>
+<p>Splits the grid sliced settlements into chunks</p></li>
+<li><p><strong>IncludeRasterCenters</strong></p>
+<p>Creates CSVs &amp; binary files on which additional shapes need to be created</p></li>
+<li><p><strong>CreateCornerShapes</strong></p>
+<p>Creates fgbs for the corners</p></li>
+<li><p><strong>UnionCenterShapes</strong></p>
+<p>Union/Dissolves all the additional corners created to make sure the settlements intersect the reference raster centers</p></li>
+<li><p><strong>CreateSettlementTable</strong></p>
+<p>xfer settlements to database</p></li>
+<li><p><strong>AreaBldgCount</strong></p>
+<p>Go through the unioned polygons / shapes calculate area in m2 and total building count.</p>
+<p>These values are used to categorize the shapes into</p>
+<ol>
+<li>Built-up Areas (&gt; 3000 buildings)</li>
+<li>Small Settlement Areas (&gt; 50 buildings)</li>
+<li>Hamlets (&lt;= 50 buildings)</li>
+</ol></li>
+<li><p><strong>MakeBuasFromContours</strong></p>
+<p>If a HA or SSA intersects a contour of big enough area, the type is set to BUA.</p>
+<p>This is to handle HAs / SSAs that have a dense enough concentration of buildings</p>
+<p>The area of the contour must be at least the number of square meters specified by <code>--contour-min-area</code>.</p></li>
+<li><p><strong>GridSliceSettlementsFinal</strong></p>
+<p>Slices the buffered/unioned buildings by the reference raster grid. This is to improve intersection performance because the extents will be smaller and the vertex accounts much lower.</p>
+<p>This will produce the raw output in working/<Country code>/grid_sliced_settlements/all.fgb</p></li>
+<li><p><strong>SplitGridSliceSettlementsFinal</strong></p>
+<p>Splits the finalized shapes grid sliced settlements into chunks</p></li>
+<li><p><strong>IntersectBuildings</strong></p>
+<p>Go through each building file and intersect them with the settlements</p>
+<p>This is done to verify each building is inside a settlement</p></li>
+<li><p><strong>ImportBuildingsToDb</strong></p>
+<p>Imports buildings to database, with partitioning</p></li>
+<li><p><strong>CheckBuildingCounts</strong></p>
+<p>Runs some sql queries to check building counts</p></li>
+</ol>
+</body>
+</html>

@@ -1,0 +1,30 @@
+[package]
+name = "buffer_shapes"
+version = "0.1.0"
+authors = ["root"]
+edition = "2018"
+license = "GPL-3.0-or-later"
+
+[dependencies]
+anyhow = "1.0"
+structopt = { version = "0.3" }
+regex = "1"
+geo_util = { path = "../geo_util" }
+serde = {version="1.0", features = ["derive"]}
+csv = "1"
+itertools = "*"
+bincode = "1"
+
+
+[dependencies.gdal]
+version = "*"
+path = "../gdal"
+features = ["array"]
+
+[dependencies.geos]
+features = ["geo", "v3_8_0"]
+path = "../geos"
+
+[dependencies.num-traits]
+version = "0.2"
+#default-features = false

@@ -1,0 +1,32 @@
+version: "3.7"
+
+services:
+
+  bldg-agg-python:
+    init: true
+    security_opt :
+    - seccomp:unconfined
+    ports:
+      - "9888:8888"
+         # dev server
+      - "8089:8080"
+    volumes:
+      - "../rust:/rust"
+      - "root_home_dir:/root"
+      - "../src:/src"
+      - "../modules:/modules"
+      - "../docker/bldg-agg-python:/build"
+      - "../.git:/.git"
+      - "test_data:/test_data"
+  db:
+    ports:
+      - "25434:5432"
+    volumes:
+      - "../modules:/modules"
+
+
+
+volumes:
+  test_data:
+  # contains rust files
+  root_home_dir:

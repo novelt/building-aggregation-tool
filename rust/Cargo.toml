@@ -1,0 +1,18 @@
+[workspace]
+
+members = [
+	"gdal-sys",
+    "gdal",
+	"geos",
+	"geos-sys",
+	"geo_util",
+	"zonal_stats",
+	"cmdline_tools",
+
+	"buffer_shapes",
+	"union_shapes",
+
+	"bldg_agg",
+
+	"fast_intersection",
+]

@@ -1,0 +1,36 @@
+language: rust
+sudo: enabled
+dist: trusty
+
+before_install:
+  - sudo add-apt-repository ppa:ubuntugis/ppa -y
+  - sudo apt-get update -q
+  - sudo apt-get install -y libgdal-dev libgdal20
+
+addons:
+ apt:
+  packages:
+    - build-essential
+
+rust:
+  - stable
+  - beta
+  - nightly
+
+script:
+  - cargo test
+  - cargo test --features bindgen
+  - cargo doc
+
+after_success: |
+  [ $TRAVIS_BRANCH = master ] &&
+  [ $TRAVIS_PULL_REQUEST = false ] &&
+  [ $TRAVIS_RUST_VERSION = nightly ] &&
+  echo '<meta http-equiv=refresh content=0;url=gdal/index.html>' > target/doc/index.html &&
+  pip install ghp-import --user $USER &&
+  $HOME/.local/bin/ghp-import -n target/doc &&
+  git push -qf https://${GHP_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+
+env:
+  global:
+    secure: Bz7V/m3goAlwH3k4QUAxjbf7X1+JKDKttBC68bheVEjy3PanyWV5rfoUyYug65UOoc796/lJ2io4FbGOnOCePpzuQFAhXqrrjp+3V2Xz+XsPi/T5T5orUhhMZWtaEuUsEUgab5COj9hfc9KOVLDgR3F47/ZALjIVm8W+PzxMcKg=

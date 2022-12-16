@@ -1,0 +1,80 @@
+[package]
+name = "geo_util"
+version = "0.2.0"
+authors = ["Eric Gröning <eg@novel-t.ch>"]
+edition = "2018"
+description = "Vector/Raster utilities used in the population models"
+build = "build.rs"
+license = "GPL-3.0-or-later"
+
+[features]
+default = []
+debug_output = []
+
+
+#[[bin]]
+#name = "cmr_census"
+#path = "src/cmr_census.rs"
+
+#[[bin]]
+#name = "combine_cod"
+#path = "src/combine_cod.rs"
+
+#[[bin]]
+#name = "classification_model"
+#path = "src/classification_model.rs"
+
+#[lib]
+#name = "geo_util"
+#path = "src/lib.rs"
+
+[dependencies]
+ndarray = {version = "0.13", features = ["rayon"] }
+rayon = "1.4"
+itertools = "*"
+serde = {version="1.0", features = ["derive"]}
+csv-core = "0.1"
+bincode = "1"
+byteorder = "1"
+postgis = "0.7"
+anyhow = "1.0"
+enum_dispatch = "0"
+num = "0.3"
+pq-sys = "0.4.6"
+chrono = "0"
+toml = "0"
+float-cmp = "0"
+structopt = { version = "0.3" }
+uuid = {version="0", features = ["v4"] }
+zerocopy = "0"
+sled = "0"
+log="0.4.14"
+bitvec = { version = "1", features = ["serde"] }
+
+
+[dependencies.geo]
+version = "0"
+features = ["serde", "use-serde"]
+
+[dependencies.rstar]
+version = "0.9.1"
+features = ["serde"]
+
+[dependencies.gdal]
+version = "*"
+path = "../gdal"
+#path = "D:\\git\\gdal"
+#git = "https://github.com/eric7237cire/gdal"
+#branch = "experiment1"
+features = ["array"]
+
+[dependencies.diesel]
+version = "1"
+features = ["postgres"]
+
+[dependencies.geos]
+features = ["geo", "v3_8_0"]
+path = "../geos"
+
+
+

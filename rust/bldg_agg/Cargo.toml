@@ -1,0 +1,50 @@
+[package]
+name = "bldg_agg"
+version = "0.1.0"
+authors = ["root"]
+edition = "2021"
+license = "GPL-3.0-or-later"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+
+[dependencies]
+geo_util = { path = "../geo_util" }
+anyhow = "1.0"
+itertools = "*"
+structopt = { version = "0.3" }
+format_num = "*"
+rayon = "1.4"
+ndarray = {version = "0.13", features = ["rayon"] }
+float-cmp = "0"
+num = "0"
+serde = {version="1.0", features = ["derive"]}
+crossbeam = "0"
+chrono = {version="0", features = ["serde"]}
+partitions = "0.2.4"
+bitvec = "0.22"
+simple_logger="2.1.0"
+log="0.4.14"
+csv="1.1.6"
+bincode = "1.3.3"
+
+[dependencies.geo]
+version = "0"
+features = ["serde", "use-serde"]
+
+[dependencies.gdal]
+version = "*"
+path = "../gdal"
+#path = "D:\\git\\gdal"
+#git = "https://github.com/eric7237cire/gdal"
+#branch = "experiment1"
+features = ["array"]
+
+# not sure why we are getting an error
+[dependencies.rstar]
+version = "0.9.1"
+features = ["serde"]
+
+[dependencies.geos]
+features = ["geo", "v3_8_0"]
+path = "../geos"

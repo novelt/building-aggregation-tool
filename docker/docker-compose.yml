@@ -1,0 +1,42 @@
+version: "3.7"
+
+services:
+
+  db:
+    image: "kartoza/postgis:14-3.1"
+    # https://github.com/kartoza/docker-postgis/blob/develop/docker-compose.yml
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASS: postgres
+      EXTRA_CONF: "max_locks_per_transaction = 1024"
+      #EXTRA_CONF: "log_statement=all"
+      ALLOW_IP_RANGE: "0.0.0.0/0"
+      # Add extensions you need to be enabled by default in the DB. Default are the five specified below
+      POSTGRES_MULTIPLE_EXTENSIONS: "postgis,hstore,postgis_topology,postgis_raster"
+    volumes :
+      - "data_volume:/var/lib/postgresql"
+
+  bldg-agg-python:
+      image: "novelt/bldg-agg-python:latest"
+      depends_on:
+        - db
+      environment:
+        WAIT_FOR_DB_TIMEOUT: 180 # 3 minutes
+        POSTGRESQL_HOST: db
+        POSTGRESQL_PORT: 5432
+        POSTGRESQL_USERNAME: postgres
+        POSTGRESQL_PASSWORD: postgres
+      env_file: local.env
+
+
+volumes:
+  data_volume:
+
+#networks:
+#  default:
+#    driver: bridge
+#    ipam:
+#      config:
+#        - subnet: 173.17.57.0/24
+
+
