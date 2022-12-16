@@ -25,7 +25,7 @@ Two libraries were imported and modified, both under the MIT license:
 
 # Building aggregation rules
 
-Buildings will be put in the same settlement if their extents intersect. This is equivalent to the extents having a horizonal and/or vertical distance of <= the grouping distance. This is controlled by the parameter group-distance, and defaults to 0.000833, which is roughly 70 to 90 meters, depending on the proximity to the equator. Once the buildings are grouped, they are all buffered by 50 meters (can be overridden by the command line argument --buffer-meters). This explains why the resulting multipolygon may have multiple polygons. All polygons are then unioned/dissolved. Finally, any inner rings caused by open areas, such as parks or sports fields,  are filled within a settled area. Those polygons are then classified, as described below.
+Buildings will be put in the same settlement if their extents intersect. This is equivalent to the extents having a horizontal and/or vertical distance of <= the grouping distance. This is controlled by the parameter group-distance, and defaults to 0.000833, which is roughly 70 to 90 meters, depending on the proximity to the equator. Once the buildings are grouped, they are all buffered by 50 meters (can be overridden by the command line argument --buffer-meters). This explains why the resulting multipolygon may have multiple polygons. All polygons are then unioned/dissolved. Finally, any inner rings caused by open areas, such as parks or sports fields,  are filled within a settled area. Those polygons are then classified, as described below.
 
 
 # Classification rules
@@ -285,42 +285,6 @@ run \
 
 Note that the CSV contains feature id, # of squares matching, sum of the square values
 
-
-
-
-# Running the id comparison tool
-
-```
-/build/run_bldg_agg.sh ID_SET_CMP --country=TGO 1 20
-```
-
-where TGO is replaced by the iso country code.
-
-This tool requires a reference raster, and the year1 and year2 input
-
-The year2 output can be copied from the building aggregation tool output with the following command (replacing NGA with the iso country code)
-
-```
-mkdir -p /modules/ID_SET_CMP/input/NGA/year2 && \
-rm -f /modules/ID_SET_CMP/input/NGA/year2/settlements.fgb && \
-ogr2ogr \
--f "FlatGeoBuf" \
-/modules/ID_SET_CMP/input/NGA/year2/settlements.fgb \
-"PG: host=db dbname=bldg_agg port=5432 user=postgres password=postgres" \
--nln "settlements" \
--progress \
--sql "select * from nga.settlements" \
--nlt MULTIPOLYGON \
--overwrite
-```
-
-Running the 1st step will show what's missing.
-
-It's recommended to use the ref_expanded.tif raster from the building aggregation tool output, as it will include all the buildings and may be larger than the original WorldPop ref raster (though still aligned)
-
-The year1 output will have its geometry fixed.
-
-The output will be in the `/modules/ID_SET_CMP/working/<country>/csv` directory
 
 # Setting up a new country
 
