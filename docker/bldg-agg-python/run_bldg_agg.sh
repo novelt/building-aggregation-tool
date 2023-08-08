@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # This file is part of the Building Aggregration Tool
 # Copyright (C) 2022 Novel-T

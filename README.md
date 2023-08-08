@@ -94,7 +94,7 @@ For WSL1: Start a Command Prompt
 
 In step 1, the code will check the inputs and tell you what you need to do.
 
-This will involve putting files in the <repo>/modules/BLDG_AGG or BLDG_CHCEK/input/<3 letter iso code in upper case>
+This will involve putting files in the <repo>/modules/BLDG_AGG/input/<3 letter iso code in upper case>
 
 For example, the Nigeria input files would go in
 

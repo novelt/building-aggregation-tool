@@ -9,11 +9,10 @@ import time
 import os
 import re
 
-from slack import WebClient
-
 slack_api_token = os.environ.get('SLACK_API_TOKEN')
 slack_client = None 
 if slack_api_token is not None and len(slack_api_token.strip()) > 0:
+    from slack import WebClient
     slack_client = WebClient(token=slack_api_token)
 
 log = logging.getLogger(__name__)
