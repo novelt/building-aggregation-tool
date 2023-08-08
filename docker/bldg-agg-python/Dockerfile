@@ -147,8 +147,8 @@ RUN chmod +x /usr/local/bin/custom_entrypoint.sh /wait-for.sh && \
 RUN pip3 install \
 psycopg2==2.8.6 python-dotenv pyproj pytest pytest-cov \
 numpy pyyaml pandas geopandas shapely sphinx matplotlib \
-contextily==1.0rc2 descartes diskcache SQLAlchemy GeoAlchemy2 yamlloader xlrd slackclient \
-scipy pyreadstat keras tflearn tensorflow sklearn jupyter \
+contextily==1.0rc2 descartes diskcache SQLAlchemy GeoAlchemy2 yamlloader xlrd  \
+scipy pyreadstat  \
 rtree pytablewriter pytablewriter[excel] xlsxwriter graphviz pygeos seaborn Pygments==2.6.1 alphashape networkx
 
 
