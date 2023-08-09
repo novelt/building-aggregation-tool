@@ -152,13 +152,15 @@ scipy pyreadstat  \
 rtree pytablewriter pytablewriter[excel] xlsxwriter graphviz pygeos seaborn Pygments==2.6.1 alphashape networkx
 
 
+# not used, just to trigger a rebuild
+ENV RUST_VERSION="1.71"
+
 # Get Rust
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 #Rust needs a username
 ENV USER="root"
-# not used, just to trigger a rebuild
-ENV RUST_VERSION="1.54"
+
 
 # Attempt to order layers starting with less frequently varying ones
 
@@ -186,7 +188,11 @@ RUN ldconfig
 ENV PYTHONPATH=/usr/local/lib/python3.8/dist-packages:/usr/local/lib/python3.8/site-packages:/usr/local/lib/python3/dist-packages:/src \
     ENV_FILE=local_docker.env
 
-RUN cargo install bindgen-cli cargo2junit cargo-tarpaulin
+# Unclear why cargo2junit is starting to fail, see a compilation error here
+# /root/.cargo/registry/src/index.crates.io-6f17d22bba15001f/junit-report-0.7.1/src/reports.rs:124:40
+# let data = strip_ansi_escapes::strip(stderr.as_str())?;
+
+RUN cargo install bindgen-cli cargo-tarpaulin
 
 COPY ./src /src
 COPY ./rust /rust
